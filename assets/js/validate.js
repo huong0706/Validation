@@ -1,9 +1,17 @@
 function Validation(options) {
     const formElement = document.querySelector(options.form);
     const submitElement = document.querySelector(options.submit);
+    const parentElements = document.querySelectorAll(options.item);
     const selectorRules = {};
-    function checkValidate(isInputValid) {
-        if (!isInputValid) {
+
+    function disabledSubmit() {
+        let isFormValid = true;
+        parentElements.forEach((parentElement) => {
+            if (parentElement.classList.contains("invalid")) {
+                isFormValid = false;
+            }
+        });
+        if (!isFormValid) {
             submitElement.classList.add("disabled");
         } else {
             submitElement.classList.remove("disabled");
@@ -19,16 +27,10 @@ function Validation(options) {
         if (errorMessage) {
             errorElement.innerText = errorMessage;
             inputElement.parentElement.classList.add("invalid");
-            // inputElement.addEventListener("input", () => {
-            //     errorElement.innerText = "";
-            //     inputElement.parentElement.classList.remove("invalid");
-            // });
-            // }
         } else {
             errorElement.innerText = "";
             inputElement.parentElement.classList.remove("invalid");
         }
-        return !errorMessage;
     }
 
     if (formElement) {
@@ -36,11 +38,11 @@ function Validation(options) {
             e.preventDefault();
             options.rules.forEach((rule) => {
                 const inputElement = formElement.querySelector(rule.selector);
-                const isInputValid = validate(inputElement, rule);
-                checkValidate(isInputValid);
+                validate(inputElement, rule);
+                disabledSubmit();
             });
         });
-        
+
         options.rules.forEach((rule) => {
             if (Array.isArray(selectorRules[rule.selector])) {
                 selectorRules[rule.selector].push(rule.test);
@@ -50,24 +52,18 @@ function Validation(options) {
             const inputElement = formElement.querySelector(rule.selector);
             if (inputElement) {
                 inputElement.addEventListener("input", () => {
-                    const isInputValid = validate(inputElement, rule);
-                    if (!isInputValid) {
-                        submitElement.classList.add("disabled");
-                    }
-
+                    validate(inputElement, rule);
+                    disabledSubmit();
                 });
             }
             if (inputElement) {
                 inputElement.addEventListener("blur", () => {
-                    const isInputValid = validate(inputElement, rule);
-                    if (!isInputValid) {
-                        submitElement.classList.add("disabled");
-                    }
+                    validate(inputElement, rule);
+                    disabledSubmit();
                 });
             }
         });
     }
-    
 }
 Validation.isRequired = function (selector) {
     return {
