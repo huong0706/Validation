@@ -11,6 +11,13 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="assets/css/main.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+            integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
     </head>
     <body>
         <!--[if lt IE 7]>
@@ -55,15 +62,22 @@
                 <span class="form__message"></span>
             </div>
             <button class="form__submit">Submit</button>
+
+            <div class="modal hidden">
+                <div class="modal__content">
+                    <div class="modal__icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="modal__text">Success!</div>
+                    <button class="modal__button">OK</button>
+                </div>
+            </div>
         </form>
 
         <script src="assets/js/validate.js"></script>
         <script>
             Validation({
                 form: "#form",
-                submit: ".form__submit",
-                error: ".form__message",
-                item: ".form__item",
                 rules: [
                     Validation.isRequired("#name"),
                     Validation.isName("#name"),
@@ -73,7 +87,7 @@
                     Validation.isPassword("#password", 8, 32),
                     Validation.isRequired("#password-confirm"),
                     Validation.isConfirmed("#password-confirm", function () {
-                        return document.querySelector("#password").value;
+                        return document.querySelector("#form #password").value;
                     }),
                 ],
             });

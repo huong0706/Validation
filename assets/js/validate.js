@@ -1,24 +1,26 @@
 function Validation(options) {
     const formElement = document.querySelector(options.form);
-    const submitElement = document.querySelector(options.submit);
-    const parentElements = document.querySelectorAll(options.item);
     const selectorRules = {};
 
-    function disabledSubmit() {
+    //Check invalid form
+    function checkValidate(parentElements, submitElement) {
         let isFormValid = true;
         parentElements.forEach((parentElement) => {
             if (parentElement.classList.contains("invalid")) {
                 isFormValid = false;
             }
         });
+        //Disable/enable submit button
         if (!isFormValid) {
             submitElement.classList.add("disabled");
         } else {
             submitElement.classList.remove("disabled");
         }
+        return isFormValid;
     }
+    // Show error message
     function validate(inputElement, rule) {
-        const errorElement = inputElement.parentElement.querySelector(options.error);
+        const errorElement = inputElement.parentElement.querySelector(".form__message");
         const rules = selectorRules[rule.selector];
         for (let i = 0; i < rules.length; i++) {
             var errorMessage = rules[i](inputElement.value);
@@ -34,13 +36,33 @@ function Validation(options) {
     }
 
     if (formElement) {
+        const parentElements = document.querySelectorAll(".form__item");
+        const submitElement = formElement.querySelector(".form__submit");
+        const modalNotify = formElement.querySelector(".modal");
+        const modalBtn = formElement.querySelector(".modal__button");
+
         formElement.addEventListener("submit", function (e) {
             e.preventDefault();
+        });
+
+        submitElement.addEventListener("click", function () {
             options.rules.forEach((rule) => {
                 const inputElement = formElement.querySelector(rule.selector);
                 validate(inputElement, rule);
-                disabledSubmit();
             });
+            const isFormValid = checkValidate(parentElements, submitElement);
+            if (isFormValid) {
+                if (modalNotify.classList.contains("hidden")) {
+                    modalNotify.classList.remove("hidden");
+                }
+                modalNotify.classList.add("active");
+            }
+        });
+        modalBtn.addEventListener("click", () => {
+            if (modalNotify.classList.contains("active")) {
+                modalNotify.classList.remove("active");
+            }
+            modalNotify.classList.add("hidden");
         });
 
         options.rules.forEach((rule) => {
@@ -53,15 +75,15 @@ function Validation(options) {
             if (inputElement) {
                 inputElement.addEventListener("input", () => {
                     validate(inputElement, rule);
-                    disabledSubmit();
+                    checkValidate(parentElements, submitElement);
                 });
             }
-            if (inputElement) {
-                inputElement.addEventListener("blur", () => {
-                    validate(inputElement, rule);
-                    disabledSubmit();
-                });
-            }
+            // if (inputElement) {
+            //     inputElement.addEventListener("blur", () => {
+            //         validate(inputElement, rule);
+            //         checkValidate(parentElements, submitElement);
+            //     });
+            // }
         });
     }
 }
