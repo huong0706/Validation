@@ -13,8 +13,11 @@ function Validation(options) {
         //Disable/enable submit button
         if (!isFormValid) {
             submitElement.classList.add("disabled");
+            submitElement.disabled = true;
         } else {
             submitElement.classList.remove("disabled");
+            submitElement.disabled = false;
+
         }
         return isFormValid;
     }
@@ -78,12 +81,6 @@ function Validation(options) {
                     checkValidate(parentElements, submitElement);
                 });
             }
-            // if (inputElement) {
-            //     inputElement.addEventListener("blur", () => {
-            //         validate(inputElement, rule);
-            //         checkValidate(parentElements, submitElement);
-            //     });
-            // }
         });
     }
 }
