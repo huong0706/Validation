@@ -17,7 +17,6 @@ function Validation(options) {
         } else {
             submitElement.classList.remove("disabled");
             submitElement.disabled = false;
-
         }
         return isFormValid;
     }
@@ -44,8 +43,16 @@ function Validation(options) {
         const modalNotify = formElement.querySelector(".modal");
         const modalBtn = formElement.querySelector(".modal__button");
 
-        formElement.addEventListener("submit", function (e) {
-            e.preventDefault();
+        formElement.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            // Close modal when clicked outside or button
+            if (event.target === modalNotify || event.target.className === "modal__button") {
+                if (modalNotify.classList.contains("active")) {
+                    modalNotify.classList.remove("active");
+                }
+                modalNotify.classList.add("hidden");
+            }
         });
 
         submitElement.addEventListener("click", function () {
@@ -60,12 +67,6 @@ function Validation(options) {
                 }
                 modalNotify.classList.add("active");
             }
-        });
-        modalBtn.addEventListener("click", () => {
-            if (modalNotify.classList.contains("active")) {
-                modalNotify.classList.remove("active");
-            }
-            modalNotify.classList.add("hidden");
         });
 
         options.rules.forEach((rule) => {
