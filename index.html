@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Validation</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+            integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+        />
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">
+                You are using an <strong>outdated</strong> browser. Please
+                <a href="#">upgrade your browser</a> to improve your experience.
+            </p>
+        <![endif]-->
+
+        <form action="" method="post" id="form">
+            <div class="form__item">
+                <h1 class="form__title">Registration</h1>
+                <label for="name" class="form__label">
+                    Họ và tên
+                    <span class="form__required">*</span>
+                </label>
+                <input type="text" id="name" class="form__input" />
+                <span class="form__message"></span>
+            </div>
+            <div class="form__item">
+                <label for="email" class="form__label">
+                    Email
+                    <span class="form__required">*</span>
+                </label>
+                <input type="email" id="email" class="form__input" />
+                <span class="form__message"></span>
+            </div>
+            <div class="form__item">
+                <label for="password" class="form__label">
+                    Mật khẩu
+                    <span class="form__required">*</span>
+                </label>
+                <input type="password" id="password" class="form__input" />
+                <span class="form__message"></span>
+            </div>
+            <div class="form__item">
+                <label for="password-confirm" class="form__label">
+                    Nhập lại mật khẩu
+                    <span class="form__required">*</span>
+                </label>
+                <input type="password" id="password-confirm" class="form__input" />
+                <span class="form__message"></span>
+            </div>
+            <button class="form__submit">Submit</button>
+
+            <div class="modal hidden">
+                <div class="modal__content">
+                    <div class="modal__icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div class="modal__text">Success!</div>
+                    <button class="modal__button">OK</button>
+                </div>
+            </div>
+        </form>
+
+        <script src="assets/js/validate.js"></script>
+        <script>
+            Validation({
+                form: "#form",
+                rules: [
+                    Validation.isRequired("#name"),
+                    Validation.isName("#name"),
+                    Validation.isRequired("#email"),
+                    Validation.isEmail("#email"),
+                    Validation.isRequired("#password"),
+                    Validation.isPassword("#password", 8, 32),
+                    Validation.isRequired("#password-confirm"),
+                    Validation.isConfirmed("#password-confirm", function () {
+                        return document.querySelector("#form #password").value;
+                    }),
+                ],
+            });
+        </script>
+    </body>
+</html>
